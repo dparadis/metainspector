@@ -133,7 +133,12 @@ module MetaInspector
       content_or_value = element.attributes["content"] ? "content" : (element.attributes["value"] ? "value" : nil)
 
       if !name_or_property.nil? && !content_or_value.nil?
-        @data.meta.name[element.attributes[name_or_property].value.downcase] = element.attributes[content_or_value].value
+        if element.attributes[name_or_property].value.downcase == 'og:image'
+          @data.meta.name['og:images'] ||= []
+          @data.meta.name['og:images'] << element.attributes[content_or_value].value
+        else
+          @data.meta.name[element.attributes[name_or_property].value.downcase] = element.attributes[content_or_value].value
+        end
       end
     end
 
